@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>RE:able 현장 입력</title>
+<title>RE:able 현장 입력 V2</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
 :root{
@@ -36,24 +36,40 @@ body{font-family:var(--sans);background:#cdd9d9;color:var(--ink);display:grid;pl
 .bchip.on{background:var(--teal);border-color:var(--teal);color:#fff}
 /* body */
 .body{flex:1;padding:18px 16px 120px}
-.hello{font-size:13px;color:var(--muted);margin:2px 0 16px}
+.hello{font-size:13px;color:var(--muted);margin:2px 0 14px}
 .hello b{color:var(--ink)}
+/* home categories */
+.cat{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.02em;margin:22px 2px 11px;display:flex;align-items:center;gap:9px}
+.cat .line{flex:1;height:1px;background:var(--line)}
 /* home tiles */
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:13px}
-.tile{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 16px;cursor:pointer;box-shadow:0 2px 8px rgba(14,31,37,.05);transition:transform .12s;text-align:left}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:17px 15px;cursor:pointer;box-shadow:0 2px 8px rgba(14,31,37,.05);transition:transform .12s;text-align:left}
 .tile:active{transform:scale(.97)}
-.tile .ic{width:46px;height:46px;border-radius:13px;background:var(--teal-tint);color:var(--teal-700);display:grid;place-items:center;margin-bottom:13px}
-.tile .ic svg{width:24px;height:24px}
-.tile .tn{font-size:15.5px;font-weight:700}
+.tile .ic{width:44px;height:44px;border-radius:13px;background:var(--teal-tint);color:var(--teal-700);display:grid;place-items:center;margin-bottom:12px}
+.tile .ic svg{width:23px;height:23px}
+.tile .tn{font-size:15px;font-weight:700}
 .tile .td{font-size:11.5px;color:var(--muted);margin-top:3px}
-.tile .cnt{margin-top:11px;font-family:var(--mono);font-size:12px;font-weight:600;color:var(--teal-700);background:var(--teal-tint);display:inline-block;padding:3px 9px;border-radius:999px}
+.tile .cnt{margin-top:10px;font-family:var(--mono);font-size:12px;font-weight:600;color:var(--teal-700);background:var(--teal-tint);display:inline-block;padding:3px 9px;border-radius:999px}
 .tile.atp .ic{background:var(--warn-soft);color:var(--warn)} .tile.atp .cnt{background:var(--warn-soft);color:#9a5e0a}
+.tile.quality .ic{background:#e7f0ff;color:#2f6fe0} .tile.quality .cnt{background:#e7f0ff;color:#2f6fe0}
+.tile.claim .ic{background:#fdeede;color:#c2761a} .tile.claim .cnt{background:#fdeede;color:#c2761a}
+.tile.rca .ic{background:#efe9fb;color:#7a52c4} .tile.rca .cnt{background:#efe9fb;color:#7a52c4}
+.tile.dry .ic{background:#e2f3f1;color:#0c9a8d} .tile.dry .cnt{background:#e2f3f1;color:#0c9a8d}
 .tile.eq .ic{background:#e2eefb;color:#2f72c4} .tile.eq .cnt{background:#e2eefb;color:#2f72c4}
+.tile.sop .ic{background:#e9f6ec;color:#15a05a} .tile.sop .cnt{background:#e9f6ec;color:#15a05a}
 .tile.loss .ic{background:var(--bad-soft);color:var(--bad)} .tile.loss .cnt{background:var(--bad-soft);color:var(--bad)}
-.summary{margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:15px 16px}
+/* risk alert banner */
+.alert{display:flex;gap:11px;align-items:flex-start;background:linear-gradient(135deg,#e9f6ec,#dcf3e6);border:1px solid #b7e3c6;border-radius:16px;padding:13px 15px;margin-bottom:4px}
+.alert.warn{background:linear-gradient(135deg,#fff4e6,#fdeede);border-color:#f3d6a8}
+.alert.bad{background:linear-gradient(135deg,#fde7e8,#fbdadc);border-color:#f1b6ba}
+.alert .ai{font-size:20px;flex:none;line-height:1.2}
+.alert .at{font-size:12.5px;color:var(--ink-2);line-height:1.5}
+.alert .at b{color:var(--ok)} .alert.warn .at b{color:#b5641a} .alert.bad .at b{color:var(--bad)}
+/* summary */
+.summary{margin-top:20px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:15px 16px}
 .summary .sh{font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px;margin-bottom:10px}
 .summary .row{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px dashed var(--line)}
-.summary .row:last-child{border-bottom:0}
+.summary .row:last-of-type{border-bottom:0}
 .summary .row span{color:var(--muted)} .summary .row b{font-family:var(--mono)}
 .recent{margin-top:8px;font-size:11.5px;color:var(--muted)}
 /* form */
@@ -74,16 +90,42 @@ input.big{font-family:var(--mono);font-size:34px;font-weight:700;text-align:cent
 .stepper button:active{background:var(--teal-tint)}
 .stepper input{flex:1}
 .unit{font-size:13px;color:var(--muted);text-align:center;margin-top:6px}
-/* atp verdict */
+/* compact counter rows */
+.cnt-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px dashed var(--line)}
+.cnt-row .cl{flex:1;font-size:14px;font-weight:600;color:var(--ink-2)}
+.cnt-row .cstep{display:flex;align-items:center;gap:8px}
+.cnt-row .cstep button{width:38px;height:38px;border:1.5px solid var(--line);background:var(--surface);border-radius:10px;font-size:20px;color:var(--teal-700);cursor:pointer}
+.cnt-row .cstep input{width:50px;text-align:center;font-family:var(--mono);font-size:18px;font-weight:700;border:1.5px solid var(--line);border-radius:9px;padding:8px 0;outline:none}
+/* verdict / calc result */
 .verdict{margin-top:12px;border-radius:13px;padding:15px;text-align:center;font-weight:700;font-size:15px;border:1.5px solid var(--line);color:var(--muted);background:var(--surface)}
 .verdict.pass{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
 .verdict.fail{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
 .verdict b{font-family:var(--mono);font-size:22px;display:block;margin-bottom:2px}
+.calc{margin-top:12px;border-radius:13px;padding:14px 15px;background:var(--teal-tint);border:1px solid var(--teal-soft);font-size:13.5px;color:var(--teal-700);line-height:1.6}
+.calc b{font-family:var(--mono);font-size:16px}
+.calc.warn{background:var(--warn-soft);border-color:#f3d6a8;color:#9a5e0a}
+.calc.bad{background:var(--bad-soft);border-color:#f1b6ba;color:var(--bad)}
+/* time grid (dry) */
+.tgrid{display:flex;flex-direction:column;gap:10px}
+.trow{display:flex;align-items:center;gap:10px}
+.trow label{font-size:13.5px;font-weight:600;color:var(--ink-2);width:80px;flex:none}
+.trow input[type=time]{flex:1;font-family:var(--mono);font-size:16px;padding:11px 12px;border:1.5px solid var(--line);border-radius:11px;background:var(--surface);color:var(--ink);outline:none}
+.trow input[type=time]:focus{border-color:var(--teal)}
+/* check list (sop) */
+.chk{display:flex;align-items:center;gap:12px;padding:14px 15px;border:1.5px solid var(--line);border-radius:13px;margin-bottom:9px;cursor:pointer;background:var(--surface);transition:all .12s}
+.chk.on{border-color:var(--ok);background:var(--ok-soft)}
+.chk .box{width:24px;height:24px;border-radius:7px;border:2px solid var(--line);flex:none;display:grid;place-items:center;color:#fff;font-size:14px;font-weight:800}
+.chk.on .box{background:var(--ok);border-color:var(--ok)}
+.chk .ct{font-size:14px;font-weight:600;color:var(--ink-2)}
+.chk .cs{font-size:11px;color:var(--muted);margin-top:1px}
+.score{text-align:center;margin-top:10px}
+.score .big{font-family:var(--mono);font-size:42px;font-weight:700;color:var(--bad);line-height:1}
+.score .big.mid{color:var(--warn)} .score .big.ok{color:var(--ok)}
+.score .lbl{font-size:12px;color:var(--muted);margin-top:4px}
 /* submit */
 .submitbar{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:440px;padding:14px 16px 22px;background:linear-gradient(180deg,rgba(238,244,244,0),#e9f0f0 30%);}
 .btn{width:100%;border:0;border-radius:15px;padding:18px;font-family:var(--sans);font-size:16.5px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--teal),var(--teal-700));cursor:pointer;box-shadow:0 6px 18px rgba(12,154,141,.35)}
 .btn:active{transform:scale(.98)}
-.btn.ghost{background:var(--surface);color:var(--ink-2);border:1.5px solid var(--line);box-shadow:none}
 /* toast */
 .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#eafffc;padding:13px 20px;border-radius:13px;font-size:14px;font-weight:600;opacity:0;transition:all .3s;z-index:50;display:flex;align-items:center;gap:9px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -112,7 +154,7 @@ input.big{font-family:var(--mono);font-size:34px;font-weight:700;text-align:cent
 </head>
 <body>
 <div class="phone">
-  <div class="proto">PROTOTYPE · 데모</div>
+  <div class="proto">PROTOTYPE · 데모 V2</div>
   <!-- HEADER -->
   <div class="hdr">
     <div class="top">
@@ -130,22 +172,58 @@ input.big{font-family:var(--mono);font-size:34px;font-weight:700;text-align:cent
   <div class="body">
     <!-- ===== HOME ===== -->
     <div class="view on" id="v-home">
-      <div class="hello"><b id="dateLine">2026-06-11 (목)</b> · 화성 공장 · 오늘도 안전하게 👋</div>
+      <div class="hello"><b id="dateLine">2026-06-18 (목)</b> · 화성 공장 · 오늘도 안전하게 👋</div>
+      <div class="alert" id="riskBanner"><div class="ai">🟢</div><div class="at"><b>현재 위험신호 없음</b><br>ATP·건조시간·출고 불량률 모두 정상 범위입니다.</div></div>
+
+      <div class="cat">📦 생산 <span class="line"></span></div>
       <div class="tiles">
         <div class="tile" onclick="go('prod')">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-5 9 5-9 5z"/><path d="M3 8v8l9 5 9-5V8"/></svg></div>
-          <div class="tn">처리량 기록</div><div class="td">세척한 식수·개수</div>
+          <div class="tn">처리량 기록</div><div class="td">목표 대비 실적</div>
           <div class="cnt" id="c-prod">오늘 0건</div>
         </div>
+        <div class="tile dry" onclick="go('dry')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h12a3 3 0 1 0-3-3"/><path d="M3 16h9a2.5 2.5 0 1 1-2.5 2.5"/><path d="M3 8h7a2 2 0 1 0-2-2"/></svg></div>
+          <div class="tn">건조 관리</div><div class="td">건조시간·대기 자동</div>
+          <div class="cnt" id="c-dry">오늘 0건</div>
+        </div>
+      </div>
+
+      <div class="cat">🧪 품질·위생 <span class="line"></span></div>
+      <div class="tiles">
         <div class="tile atp" onclick="go('atp')">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.8-7 9-4-1.2-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
-          <div class="tn">ATP 위생</div><div class="td">측정값 입력 (≤20 합격)</div>
+          <div class="tn">ATP 위생</div><div class="td">측정값 (≤20 합격)</div>
           <div class="cnt" id="c-atp">오늘 0건</div>
         </div>
+        <div class="tile quality" onclick="go('quality')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8.5 11l1.7 1.7 3.3-3.4"/></svg></div>
+          <div class="tn">출고 품질검사</div><div class="td">육안검사·불량률</div>
+          <div class="cnt" id="c-quality">오늘 0건</div>
+        </div>
+        <div class="tile claim" onclick="go('claim')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.9-.9L3 21l1.9-5.6a8.5 8.5 0 1 1 16.1-3.9z"/><path d="M12 8v4M12 16h.01"/></svg></div>
+          <div class="tn">클레임 접수</div><div class="td">고객 클레임 기록</div>
+          <div class="cnt" id="c-claim">오늘 0건</div>
+        </div>
+        <div class="tile rca" onclick="go('rca')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.5 2.5M16.5 16.5L19 19"/></svg></div>
+          <div class="tn">RCA 원인분석</div><div class="td">5Why·조치</div>
+          <div class="cnt" id="c-rca">오늘 0건</div>
+        </div>
+      </div>
+
+      <div class="cat">⚙️ 설비·관리 <span class="line"></span></div>
+      <div class="tiles">
         <div class="tile eq" onclick="go('eq')">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/></svg></div>
           <div class="tn">설비 점검</div><div class="td">온도·이상유무</div>
           <div class="cnt" id="c-eq">오늘 0건</div>
+        </div>
+        <div class="tile sop" onclick="go('sop')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+          <div class="tn">SOP 일일점검</div><div class="td">5대 준수항목 점수</div>
+          <div class="cnt" id="c-sop">오늘 0건</div>
         </div>
         <div class="tile loss" onclick="go('loss')">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/><path d="M10 11v5M14 11v5"/></svg></div>
@@ -158,33 +236,56 @@ input.big{font-family:var(--mono);font-size:34px;font-weight:700;text-align:cent
         <div class="sh">📋 오늘 입력 현황 <span style="margin-left:auto;font-family:var(--mono);font-weight:700;color:var(--teal-700)" id="totCnt">0건</span></div>
         <div class="row"><span>처리량 합계</span><b id="s-prod">0 식</b></div>
         <div class="row"><span>ATP 합격 / 불합격</span><b id="s-atp">0 / 0</b></div>
-        <div class="row"><span>설비 점검</span><b id="s-eq">0 대</b></div>
-        <div class="row"><span>손실·재세척</span><b id="s-loss">0 건</b></div>
+        <div class="row"><span>출고 불량률</span><b id="s-quality">—</b></div>
+        <div class="row"><span>SOP 준수점수</span><b id="s-sop">—</b></div>
+        <div class="row"><span>클레임 / 손실</span><b id="s-claim">0 / 0</b></div>
         <div class="recent" id="recent">아직 입력이 없습니다. 위 버튼을 눌러 시작하세요.</div>
       </div>
-      <div class="note">📱 이 화면이 작업자가 폰으로 보는 입력 도구입니다. 현장에 <b>QR코드</b>를 붙여두면 앱 설치 없이 바로 열립니다. 입력값은 자동으로 모여 MES 대시보드 숫자가 됩니다.</div>
+      <div class="note">📱 이 화면이 작업자가 폰으로 보는 입력 도구입니다(데모 V2). 현장 제안을 반영해 <b>건조·출고검사·클레임·RCA·SOP·위험예측</b>을 추가했습니다. 입력값은 자동으로 모여 MES 대시보드 숫자가 됩니다.</div>
     </div>
 
-    <!-- ===== 처리량 ===== -->
+    <!-- ===== 처리량 (① 목표 대비 실적) ===== -->
     <div class="view" id="v-prod">
       <div class="field"><div class="label">품목 <span class="req">*</span></div>
         <div class="chips" data-group="prod-item">
           <div class="chip on">식판(4칸)</div><div class="chip">컵 10oz</div><div class="chip">컵 16oz</div><div class="chip">컵 22oz</div><div class="chip">리드</div><div class="chip">장례-밥그릇</div><div class="chip">장례-국그릇</div><div class="chip">장례-앞접시</div>
         </div>
       </div>
-      <div class="field"><div class="label">처리 수량 <span class="req">*</span></div>
-        <div class="stepper">
-          <button onclick="bump('prodQty',-10)">−</button>
-          <input class="fin big" id="prodQty" type="number" inputmode="numeric" value="0">
-          <button onclick="bump('prodQty',10)">+</button>
-        </div>
+      <div class="field"><div class="label">목표 출고량 <span class="hint" style="margin-left:auto">기본 셋팅값</span></div>
+        <div class="stepper"><button onclick="bump('prodTarget',-50)">−</button><input class="fin big" id="prodTarget" type="number" inputmode="numeric" value="1000" oninput="prodCalc()"><button onclick="bump('prodTarget',50)">+</button></div>
+        <div class="unit">식 (목표)</div>
+      </div>
+      <div class="field"><div class="label">실제 처리 수량 <span class="req">*</span></div>
+        <div class="stepper"><button onclick="bump('prodQty',-10)">−</button><input class="fin big" id="prodQty" type="number" inputmode="numeric" value="0" oninput="prodCalc()"><button onclick="bump('prodQty',10)">+</button></div>
         <div class="unit">식 / 개 (＋ 버튼은 10단위)</div>
+        <div class="calc" id="prodV">목표·실적을 입력하면 달성률이 자동 표시됩니다</div>
+      </div>
+      <div class="field" id="prodShortField" style="display:none"><div class="label">미달 사유 <span class="req">*</span></div>
+        <div class="chips" data-group="prod-short"><div class="chip on warn">설비 이슈</div><div class="chip warn">인력 부족</div><div class="chip warn">물량 감소</div><div class="chip bad">사고·고장</div><div class="chip">기타</div></div>
+        <input class="fin" id="prodShortMemo" placeholder="상세 사유 (선택)" style="margin-top:9px">
       </div>
       <div class="field"><div class="label">작업 시간대</div>
         <div class="chips" data-group="prod-shift"><div class="chip on">오전</div><div class="chip">오후</div><div class="chip">마감</div></div>
       </div>
       <div class="field"><div class="label">메모 <span class="hint">(선택)</span></div>
         <input class="fin" id="prodMemo" placeholder="예: 컨베이어 2호 라인">
+      </div>
+    </div>
+
+    <!-- ===== 건조 관리 (② 신규) ===== -->
+    <div class="view" id="v-dry">
+      <div class="field"><div class="label">품목 / Lot <span class="hint">(선택)</span></div>
+        <input class="fin" id="dryLot" placeholder="예: 식판 · L-0618-03">
+      </div>
+      <div class="field"><div class="label">공정 시각 입력 <span class="req">*</span></div>
+        <div class="tgrid">
+          <div class="trow"><label>세척 종료</label><input type="time" id="dWashEnd" oninput="dryCalc()"></div>
+          <div class="trow"><label>건조 시작</label><input type="time" id="dDryStart" oninput="dryCalc()"></div>
+          <div class="trow"><label>건조 완료</label><input type="time" id="dDryEnd" oninput="dryCalc()"></div>
+          <div class="trow"><label>적재 시작</label><input type="time" id="dLoadStart" oninput="dryCalc()"></div>
+          <div class="trow"><label>출고 시각</label><input type="time" id="dOut" oninput="dryCalc()"></div>
+        </div>
+        <div class="calc" id="dryV">시각을 입력하면 건조시간·적재 대기시간이 자동 계산됩니다</div>
       </div>
     </div>
 
@@ -202,6 +303,66 @@ input.big{font-family:var(--mono);font-size:34px;font-weight:700;text-align:cent
       </div>
       <div class="field"><div class="label">측정자 <span class="req">*</span></div>
         <input class="fin" id="atpBy" value="김현장">
+      </div>
+    </div>
+
+    <!-- ===== 출고 품질검사 (③ 신규) ===== -->
+    <div class="view" id="v-quality">
+      <div class="field"><div class="label">품목 <span class="req">*</span></div>
+        <div class="chips" data-group="q-item"><div class="chip on">식판(4칸)</div><div class="chip">컵 16oz</div><div class="chip">장례 다회용기</div></div>
+      </div>
+      <div class="field"><div class="label">검사 수량 <span class="req">*</span> <span class="hint" style="margin-left:auto">샘플 기본 50개</span></div>
+        <div class="stepper"><button onclick="bump('qInsp',-10)">−</button><input class="fin big" id="qInsp" type="number" inputmode="numeric" value="50" oninput="qualityCalc()"><button onclick="bump('qInsp',10)">+</button></div>
+        <div class="unit">개</div>
+      </div>
+      <div class="field"><div class="label">불량 개수 <span class="hint">(항목별 ± 입력)</span></div>
+        <div class="cnt-row"><div class="cl">🦠 곰팡이</div><div class="cstep"><button onclick="bump('qMold',-1)">−</button><input id="qMold" type="number" value="0" oninput="qualityCalc()"><button onclick="bump('qMold',1)">+</button></div></div>
+        <div class="cnt-row"><div class="cl">🍚 음식물 잔존</div><div class="cstep"><button onclick="bump('qFood',-1)">−</button><input id="qFood" type="number" value="0" oninput="qualityCalc()"><button onclick="bump('qFood',1)">+</button></div></div>
+        <div class="cnt-row"><div class="cl">🌀 물자국·얼룩</div><div class="cstep"><button onclick="bump('qMark',-1)">−</button><input id="qMark" type="number" value="0" oninput="qualityCalc()"><button onclick="bump('qMark',1)">+</button></div></div>
+        <div class="cnt-row" style="border-bottom:0"><div class="cl">💧 수분 잔존</div><div class="cstep"><button onclick="bump('qWater',-1)">−</button><input id="qWater" type="number" value="0" oninput="qualityCalc()"><button onclick="bump('qWater',1)">+</button></div></div>
+        <div class="calc" id="qualityV">검사 수량을 입력하면 불량률이 자동 계산됩니다</div>
+      </div>
+      <div class="field"><div class="label">검사자 <span class="req">*</span></div>
+        <input class="fin" id="qBy" value="김현장">
+      </div>
+    </div>
+
+    <!-- ===== 클레임 (④ 신규) ===== -->
+    <div class="view" id="v-claim">
+      <div class="field"><div class="label">기관 · 거래처 <span class="req">*</span></div>
+        <input class="fin" id="claimOrg" placeholder="예: 햇살어린이집">
+      </div>
+      <div class="field"><div class="label">품목 <span class="req">*</span></div>
+        <div class="chips" data-group="claim-item"><div class="chip on">식판(4칸)</div><div class="chip">컵 16oz</div><div class="chip">장례 다회용기</div><div class="chip">기타</div></div>
+      </div>
+      <div class="field"><div class="label">클레임 구분 <span class="req">*</span></div>
+        <div class="chips" data-group="claim-type"><div class="chip on bad">위생·이물</div><div class="chip warn">파손</div><div class="chip warn">수량 부족</div><div class="chip">배송 지연</div><div class="chip">기타</div></div>
+      </div>
+      <div class="field"><div class="label">발생일 <span class="req">*</span></div>
+        <input class="fin" id="claimDate" type="date">
+      </div>
+      <div class="field"><div class="label">내용 <span class="hint">(사진 첨부는 정식버전 지원)</span></div>
+        <input class="fin" id="claimMemo" placeholder="예: 식판 모서리 곰팡이 발견 · 학부모 항의">
+      </div>
+      <div class="note">📌 접수된 클레임은 정식버전에서 <b>일별·주별·월별로 자동 집계</b>되어 기관별·품목별 추이를 보여줍니다.</div>
+    </div>
+
+    <!-- ===== RCA (⑤ 신규) ===== -->
+    <div class="view" id="v-rca">
+      <div class="note" style="margin-top:0;margin-bottom:16px">🔍 ATP 불합격·클레임 등 문제가 생겼을 때 <b>근본 원인</b>을 찾는 5Why 분석입니다.</div>
+      <div class="field"><div class="label">문제 현상 <span class="req">*</span></div>
+        <input class="fin" id="rcaProb" placeholder="예: 햇살어린이집 식판 곰팡이 클레임">
+      </div>
+      <div class="field"><div class="label">원인 분류 <span class="req">*</span></div>
+        <div class="chips" data-group="rca-cause"><div class="chip on">건조 불량</div><div class="chip">세척 불량</div><div class="chip">보관·적재</div><div class="chip">설비 고장</div><div class="chip">작업 실수</div></div>
+      </div>
+      <div class="field"><div class="label">왜? (5Why로 파고들기)</div>
+        <input class="fin" id="rcaWhy1" placeholder="Why 1 — 왜 발생했나?" style="margin-bottom:8px">
+        <input class="fin" id="rcaWhy2" placeholder="Why 2 — 그건 왜?" style="margin-bottom:8px">
+        <input class="fin" id="rcaWhy3" placeholder="Why 3 — 근본 원인은?">
+      </div>
+      <div class="field"><div class="label">조치 사항 <span class="req">*</span></div>
+        <input class="fin" id="rcaAction" placeholder="예: 건조시간 40분으로 상향 + 출고 전 재검사">
       </div>
     </div>
 
@@ -239,6 +400,17 @@ input.big{font-family:var(--mono);font-size:34px;font-weight:700;text-align:cent
         <div class="chips" data-group="loss-reason"><div class="chip on">낙하·파손</div><div class="chip">노후</div><div class="chip">고객 미반납</div><div class="chip">오염 잔존</div><div class="chip">기타</div></div>
       </div>
     </div>
+
+    <!-- ===== SOP 일일점검 (⑥ 신규) ===== -->
+    <div class="view" id="v-sop">
+      <div class="note" style="margin-top:0;margin-bottom:16px">✅ 하루 마감 전 <b>5대 표준 준수항목</b>을 점검하세요. 누르면 점수가 올라갑니다 (각 20점).</div>
+      <div class="chk" data-k="세척온도" onclick="sopToggle(this)"><div class="box"></div><div><div class="ct">세척 온도 확인</div><div class="cs">60~65℃ 유지 점검</div></div></div>
+      <div class="chk" data-k="헹굼온도" onclick="sopToggle(this)"><div class="box"></div><div><div class="ct">헹굼 온도 확인</div><div class="cs">80~85℃ 유지 점검</div></div></div>
+      <div class="chk" data-k="ATP측정" onclick="sopToggle(this)"><div class="box"></div><div><div class="ct">ATP 측정 실시</div><div class="cs">Lot별 위생 측정·기록</div></div></div>
+      <div class="chk" data-k="건조시간" onclick="sopToggle(this)"><div class="box"></div><div><div class="ct">건조시간 준수</div><div class="cs">최소 30분 이상 건조</div></div></div>
+      <div class="chk" data-k="출고검사" onclick="sopToggle(this)"><div class="box"></div><div><div class="ct">출고 품질검사</div><div class="cs">샘플 육안검사 완료</div></div></div>
+      <div class="score"><div class="big" id="sopScore">0</div><div class="lbl" id="sopLbl">0 / 5 항목 점검 완료</div></div>
+    </div>
   </div>
 
   <!-- SUBMIT BAR -->
@@ -267,17 +439,21 @@ input.big{font-family:var(--mono);font-size:34px;font-weight:700;text-align:cent
 </div>
 
 <script>
-const KEY='reable_field_log';
+const KEY='reable_field_log_v2';
 let cur='home';
 let branch='화성';
 
+function gv(id){ const e=document.getElementById(id); return e?e.value:''; }
 function log(){ try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return[]} }
 function save(arr){ localStorage.setItem(KEY,JSON.stringify(arr)) }
-function today(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0') } // 오늘 날짜(로컬 기준)
+function today(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0') }
 
 const TITLES={ home:['RE:able 현장 입력','THEJOEUN · 세척 생산기록'],
-  prod:['처리량 기록','세척 완료 수량 입력'], atp:['ATP 위생 측정','위생기준 20 RLU 이하'],
-  eq:['설비 점검','가동 상태 기록'], loss:['손실·재세척','파손·분실·재세척'] };
+  prod:['처리량 기록','목표 대비 실적 입력'], dry:['건조 관리','세척→건조→출고 시각'],
+  atp:['ATP 위생 측정','위생기준 20 RLU 이하'], quality:['출고 품질검사','샘플 50개 육안검사'],
+  claim:['클레임 접수','고객 클레임 기록'], rca:['RCA 원인분석','문제 발생 시 5Why'],
+  eq:['설비 점검','가동 상태 기록'], loss:['손실·재세척','파손·분실·재세척'],
+  sop:['SOP 일일점검','5대 준수항목 체크'] };
 
 function go(v){
   cur=v;
@@ -289,10 +465,17 @@ function go(v){
   document.getElementById('subBar').style.display = v==='home'?'none':'block';
   document.getElementById('brow').style.display = v==='home'?'flex':'none';
   if(v==='atp') atpVerdict();
+  if(v==='prod') prodCalc();
+  if(v==='quality') qualityCalc();
+  if(v==='dry') dryCalc();
   window.scrollTo(0,0);
   if(v==='home') refresh();
 }
-function bump(id,d){ const el=document.getElementById(id); el.value=Math.max(0,(parseInt(el.value||0)+d)); if(id==='atpRlu')atpVerdict(); }
+function bump(id,d){ const el=document.getElementById(id); el.value=Math.max(0,(parseInt(el.value||0)+d));
+  if(id==='atpRlu')atpVerdict();
+  if(id==='prodQty'||id==='prodTarget')prodCalc();
+  if(['qInsp','qMold','qFood','qMark','qWater'].includes(id))qualityCalc();
+}
 
 // chip groups single-select
 document.addEventListener('click',e=>{
@@ -311,29 +494,98 @@ document.getElementById('brow').addEventListener('click',e=>{
 function pick(g){ const el=document.querySelector('[data-group="'+g+'"] .chip.on'); return el?el.textContent:''; }
 
 function atpVerdict(){
-  const v=parseInt(document.getElementById('atpRlu').value);
+  const v=parseInt(gv('atpRlu'));
   const el=document.getElementById('atpV');
   if(isNaN(v)){ el.className='verdict'; el.textContent='숫자를 입력하면 합격 여부가 표시됩니다'; return; }
   if(v<=20){ el.className='verdict pass'; el.innerHTML='<b>'+v+' RLU</b>합격 ✓ 출고 가능'; }
   else { el.className='verdict fail'; el.innerHTML='<b>'+v+' RLU</b>불합격 ✕ 재세척 지시 (출고 차단)'; }
 }
 
+// ① 처리량 달성률
+function prodCalc(){
+  const t=+gv('prodTarget')||0, q=+gv('prodQty')||0;
+  const el=document.getElementById('prodV'); const sf=document.getElementById('prodShortField');
+  if(t<=0||q<=0){ el.className='calc'; el.textContent='목표·실적을 입력하면 달성률이 자동 표시됩니다'; sf.style.display='none'; return; }
+  const a=q/t*100;
+  if(a>=100){ el.className='calc'; el.innerHTML='달성률 <b>'+a.toFixed(0)+'%</b> · 목표 달성 ✓'; sf.style.display='none'; }
+  else { el.className='calc warn'; el.innerHTML='달성률 <b>'+a.toFixed(0)+'%</b> · 목표 '+(t-q).toLocaleString()+'식 미달 — 사유를 적어주세요'; sf.style.display='block'; }
+}
+
+// ② 건조 자동계산
+function tmin(a,b){ if(!a||!b)return null; const x=a.split(':').map(Number),y=b.split(':').map(Number); let d=(y[0]*60+y[1])-(x[0]*60+x[1]); if(d<0)d+=1440; return d; }
+function dryCalc(){
+  const ds=gv('dDryStart'),de=gv('dDryEnd'),ls=gv('dLoadStart');
+  const dryT=tmin(ds,de), waitT=tmin(de,ls);
+  const el=document.getElementById('dryV');
+  if(dryT==null&&waitT==null){ el.className='calc'; el.textContent='시각을 입력하면 건조시간·적재 대기시간이 자동 계산됩니다'; return; }
+  let parts=[], cls='calc';
+  if(dryT!=null) parts.push('건조시간 <b>'+dryT+'분</b>');
+  if(waitT!=null) parts.push('적재대기 <b>'+waitT+'분</b>');
+  if(dryT!=null&&dryT<30){ cls='calc bad'; parts.push('⚠ 건조 30분 미만 — 곰팡이 위험'); }
+  el.className=cls; el.innerHTML=parts.join(' · ');
+}
+
+// ③ 출고 품질검사 불량률
+function qualityCalc(){
+  const insp=+gv('qInsp')||0;
+  const defs=['qMold','qFood','qMark','qWater'].reduce((a,id)=>a+(+gv(id)||0),0);
+  const el=document.getElementById('qualityV');
+  if(insp<=0){ el.className='calc'; el.textContent='검사 수량을 입력하면 불량률이 자동 계산됩니다'; return; }
+  const rate=defs/insp*100;
+  if(defs===0){ el.className='calc'; el.innerHTML='<b>0.0%</b> · 전수 양호 ✓'; }
+  else if(rate<=2){ el.className='calc warn'; el.innerHTML='불량률 <b>'+rate.toFixed(1)+'%</b> ('+defs+'/'+insp+'개) · 주의 관찰'; }
+  else { el.className='calc bad'; el.innerHTML='불량률 <b>'+rate.toFixed(1)+'%</b> ('+defs+'/'+insp+'개) · 기준 초과! 원인분석(RCA) 권고'; }
+}
+
+// ⑥ SOP 점수
+function sopToggle(el){ el.classList.toggle('on'); el.querySelector('.box').textContent = el.classList.contains('on')?'✓':''; sopCalc(); }
+function sopCalc(){
+  const done=document.querySelectorAll('#v-sop .chk.on').length;
+  const score=done*20;
+  const el=document.getElementById('sopScore');
+  let cls='big'; if(score>=100)cls='big ok'; else if(score>=60)cls='big mid';
+  el.className=cls; el.textContent=score;
+  document.getElementById('sopLbl').textContent=done+' / 5 항목 점검 완료';
+}
+
 function toast(msg){ const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); }
 
 function submitForm(){
   const arr=log(); const t=today(); let rec={type:cur,branch,date:t,ts:new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})};
-  if(cur==='prod'){ const q=parseInt(document.getElementById('prodQty').value||0); if(q<=0)return toast('수량을 입력하세요');
-    rec.item=pick('prod-item'); rec.qty=q; rec.shift=pick('prod-shift'); rec.memo=document.getElementById('prodMemo').value;
-    document.getElementById('prodQty').value=0; document.getElementById('prodMemo').value=''; }
-  else if(cur==='atp'){ const r=parseInt(document.getElementById('atpRlu').value); if(isNaN(r))return toast('측정값을 입력하세요');
-    rec.item=pick('atp-item'); rec.rlu=r; rec.pass=r<=20; rec.lot=document.getElementById('atpLot').value; rec.by=document.getElementById('atpBy').value;
+  if(cur==='prod'){ const q=parseInt(gv('prodQty')||0); if(q<=0)return toast('수량을 입력하세요');
+    const tgt=parseInt(gv('prodTarget')||0);
+    rec.item=pick('prod-item'); rec.qty=q; rec.target=tgt; rec.achieve=tgt>0?+(q/tgt*100).toFixed(0):null;
+    rec.short=(tgt>0&&q<tgt)?pick('prod-short'):''; rec.shortMemo=gv('prodShortMemo'); rec.shift=pick('prod-shift'); rec.memo=gv('prodMemo');
+    document.getElementById('prodQty').value=0; document.getElementById('prodMemo').value=''; prodCalc(); }
+  else if(cur==='dry'){ const ds=gv('dDryStart'),de=gv('dDryEnd'); if(!ds||!de)return toast('건조 시작·완료 시각을 입력하세요');
+    rec.lot=gv('dryLot'); rec.washEnd=gv('dWashEnd'); rec.dryStart=ds; rec.dryEnd=de; rec.loadStart=gv('dLoadStart'); rec.out=gv('dOut');
+    rec.dryT=tmin(ds,de); rec.waitT=tmin(de,gv('dLoadStart')); }
+  else if(cur==='atp'){ const r=parseInt(gv('atpRlu')); if(isNaN(r))return toast('측정값을 입력하세요');
+    rec.item=pick('atp-item'); rec.rlu=r; rec.pass=r<=20; rec.lot=gv('atpLot'); rec.by=gv('atpBy');
     document.getElementById('atpRlu').value=''; document.getElementById('atpLot').value=''; atpVerdict(); }
-  else if(cur==='eq'){ rec.name=pick('eq-name'); rec.wash=document.getElementById('eqWash').value; rec.rinse=document.getElementById('eqRinse').value;
-    rec.status=pick('eq-status'); rec.memo=document.getElementById('eqMemo').value; document.getElementById('eqMemo').value=''; }
-  else if(cur==='loss'){ const q=parseInt(document.getElementById('lossQty').value||0); if(q<=0)return toast('수량을 입력하세요');
+  else if(cur==='quality'){ const insp=+gv('qInsp')||0; if(insp<=0)return toast('검사 수량을 입력하세요');
+    const defs={mold:+gv('qMold')||0,food:+gv('qFood')||0,mark:+gv('qMark')||0,water:+gv('qWater')||0};
+    const sum=defs.mold+defs.food+defs.mark+defs.water;
+    rec.item=pick('q-item'); rec.insp=insp; rec.defs=defs; rec.defSum=sum; rec.rate=+(sum/insp*100).toFixed(1); rec.by=gv('qBy');
+    ['qMold','qFood','qMark','qWater'].forEach(id=>document.getElementById(id).value=0); qualityCalc(); }
+  else if(cur==='claim'){ const org=gv('claimOrg').trim(); if(!org)return toast('기관·거래처를 입력하세요');
+    rec.org=org; rec.item=pick('claim-item'); rec.ctype=pick('claim-type'); rec.cdate=gv('claimDate'); rec.memo=gv('claimMemo');
+    document.getElementById('claimOrg').value=''; document.getElementById('claimMemo').value=''; }
+  else if(cur==='rca'){ const p=gv('rcaProb').trim(); if(!p)return toast('문제 현상을 입력하세요');
+    rec.prob=p; rec.cause=pick('rca-cause'); rec.why=[gv('rcaWhy1'),gv('rcaWhy2'),gv('rcaWhy3')].filter(Boolean); rec.action=gv('rcaAction');
+    ['rcaProb','rcaWhy1','rcaWhy2','rcaWhy3','rcaAction'].forEach(id=>document.getElementById(id).value=''); }
+  else if(cur==='eq'){ rec.name=pick('eq-name'); rec.wash=gv('eqWash'); rec.rinse=gv('eqRinse');
+    rec.status=pick('eq-status'); rec.memo=gv('eqMemo'); document.getElementById('eqMemo').value=''; }
+  else if(cur==='loss'){ const q=parseInt(gv('lossQty')||0); if(q<=0)return toast('수량을 입력하세요');
     rec.item=pick('loss-item'); rec.ltype=pick('loss-type'); rec.qty=q; rec.reason=pick('loss-reason'); }
+  else if(cur==='sop'){ const done=document.querySelectorAll('#v-sop .chk.on').length; if(done===0)return toast('항목을 체크하세요');
+    rec.done=done; rec.score=done*20; rec.items=[...document.querySelectorAll('#v-sop .chk.on')].map(c=>c.dataset.k); }
   arr.unshift(rec); save(arr);
-  toast(rec.type==='atp'&&rec.pass===false?'불합격 기록 · 즉시 재세척 지시하세요':'저장되었습니다');
+  let msg='저장되었습니다';
+  if(rec.type==='atp'&&rec.pass===false) msg='불합격 기록 · 즉시 재세척 지시하세요';
+  else if(rec.type==='quality'&&rec.rate>2) msg='불량률 기준 초과 · RCA 분석을 권장합니다';
+  else if(rec.type==='claim') msg='클레임 접수됨 · 원인분석(RCA)으로 연결하세요';
+  toast(msg);
   go('home');
 }
 
@@ -341,23 +593,47 @@ function refresh(){
   const d0=new Date(); const wd='일월화수목금토'[d0.getDay()];
   document.getElementById('dateLine').textContent=today()+' ('+wd+')';
   const arr=log().filter(r=>r.date===today());
-  const c={prod:0,atp:0,eq:0,loss:0}; arr.forEach(r=>c[r.type]++);
-  c4('c-prod',c.prod);c4('c-atp',c.atp);c4('c-eq',c.eq);c4('c-loss',c.loss);
+  const c={prod:0,dry:0,atp:0,quality:0,claim:0,rca:0,eq:0,loss:0,sop:0}; arr.forEach(r=>{ if(c[r.type]!=null)c[r.type]++; });
+  Object.keys(c).forEach(k=>{ const el=document.getElementById('c-'+k); if(el)el.textContent='오늘 '+c[k]+'건'; });
   document.getElementById('totCnt').textContent=arr.length+'건';
+
   const prodSum=arr.filter(r=>r.type==='prod').reduce((a,b)=>a+(b.qty||0),0);
   const pass=arr.filter(r=>r.type==='atp'&&r.pass).length, fail=arr.filter(r=>r.type==='atp'&&r.pass===false).length;
   const lossSum=arr.filter(r=>r.type==='loss').reduce((a,b)=>a+(b.qty||0),0);
   document.getElementById('s-prod').textContent=prodSum.toLocaleString()+' 식';
   document.getElementById('s-atp').innerHTML=pass+' / <span style="color:var(--bad)">'+fail+'</span>';
-  document.getElementById('s-eq').textContent=arr.filter(r=>r.type==='eq').length+' 대';
-  document.getElementById('s-loss').textContent=lossSum+' 건';
-  const labels={prod:'처리량',atp:'ATP',eq:'설비',loss:'손실'};
+  // 출고 불량률 (가중평균)
+  const qs=arr.filter(r=>r.type==='quality'); const qInsp=qs.reduce((a,b)=>a+(b.insp||0),0), qDef=qs.reduce((a,b)=>a+(b.defSum||0),0);
+  document.getElementById('s-quality').textContent = qInsp>0 ? (qDef/qInsp*100).toFixed(1)+' %' : '—';
+  // SOP 최신 점수
+  const sops=arr.filter(r=>r.type==='sop'); document.getElementById('s-sop').textContent = sops.length ? sops[0].score+' 점' : '—';
+  document.getElementById('s-claim').textContent = c.claim+' / '+lossSum;
+
+  // ⑦ 위험예측 배너
+  const dryShort=arr.filter(r=>r.type==='dry'&&r.dryT!=null&&r.dryT<30).length;
+  const qBad=arr.filter(r=>r.type==='quality'&&r.rate>2).length;
+  let sig=[];
+  if(fail>0) sig.push('ATP 불합격 '+fail+'건');
+  if(dryShort>0) sig.push('건조 30분 미만 '+dryShort+'건');
+  if(qBad>0) sig.push('출고 불량률 기준초과 '+qBad+'건');
+  if(c.claim>0) sig.push('클레임 '+c.claim+'건');
+  const rb=document.getElementById('riskBanner');
+  if(sig.length===0){ rb.className='alert'; rb.innerHTML='<div class="ai">🟢</div><div class="at"><b>현재 위험신호 없음</b><br>ATP·건조시간·출고 불량률 모두 정상 범위입니다.</div>'; }
+  else { const lv=(fail>0||qBad>0)?'bad':'warn'; rb.className='alert '+lv;
+    rb.innerHTML='<div class="ai">'+(lv==='bad'?'🔴':'🟠')+'</div><div class="at"><b>곰팡이·클레임 위험 주의</b><br>'+sig.join(' · ')+' → 재세척·건조시간 점검 및 RCA 권고</div>'; }
+
+  const labels={prod:'처리량',dry:'건조',atp:'ATP',quality:'품질검사',claim:'클레임',rca:'RCA',eq:'설비',loss:'손실',sop:'SOP'};
   const rec=arr.slice(0,3).map(r=>{
-    let d=labels[r.type]+' · '+(r.item||r.name||'')+(r.qty?(' '+r.qty):'')+(r.rlu!=null?(' '+r.rlu+'RLU'+(r.pass?' 합격':' 불합격')):'')+(r.status?(' '+r.status):'');
+    let d=labels[r.type]+' · '+(r.item||r.name||r.org||r.prob||'')
+      +(r.qty?(' '+r.qty):'')
+      +(r.rlu!=null?(' '+r.rlu+'RLU'+(r.pass?' 합격':' 불합격')):'')
+      +(r.rate!=null?(' 불량 '+r.rate+'%'):'')
+      +(r.dryT!=null?(' 건조'+r.dryT+'분'):'')
+      +(r.score!=null?(' '+r.score+'점'):'')
+      +(r.status?(' '+r.status):'');
     return '· '+r.ts+'  '+d; }).join('<br>');
   document.getElementById('recent').innerHTML = arr.length? rec : '아직 입력이 없습니다. 위 버튼을 눌러 시작하세요.';
 }
-function c4(id,n){ document.getElementById(id).textContent='오늘 '+n+'건'; }
 
 // ===== 피드백(의견) =====
 function fbOpen(){
@@ -370,14 +646,12 @@ document.getElementById('fbMask').addEventListener('click',e=>{ if(e.target.id==
 const FB_FORM_URL = "";
 const FB_MAIL = "narcissism700@gmail.com";
 function fbSend(){
-  const add=document.getElementById('fbAdd').value.trim();
-  const rm=document.getElementById('fbRemove').value.trim();
-  const free=document.getElementById('fbFree').value.trim();
+  const add=gv('fbAdd').trim(); const rm=gv('fbRemove').trim(); const free=gv('fbFree').trim();
   if(!add&&!rm&&!free){ toast('한 칸이라도 적어주세요'); return; }
   const screenName=(TITLES[cur]?TITLES[cur][0]:cur);
   if(FB_FORM_URL){ window.open(FB_FORM_URL,'_blank'); toast('의견 폼이 열립니다 🙏'); fbClose(); return; }
-  const who=document.getElementById('fbWho').value.trim();
-  const subject='[MES 데모 의견] '+screenName+' 화면 ('+branch+')';
+  const who=gv('fbWho').trim();
+  const subject='[MES 데모 V2 의견] '+screenName+' 화면 ('+branch+')';
   const body='■ 화면: '+screenName+'\n■ 지점: '+branch+'\n■ 작성자: '+(who||'(미기재)')
     +'\n\n[➕ 추가했으면 하는 항목]\n'+(add||'-')
     +'\n\n[➖ 빼거나 불필요한 항목]\n'+(rm||'-')
