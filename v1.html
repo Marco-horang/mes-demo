@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>RE:able 현장 입력</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+:root{
+  --teal:#0c9a8d;--teal-700:#097569;--cyan:#14b8c4;--teal-tint:#effaf8;--teal-soft:#d7efec;
+  --ink:#0e1f25;--ink-2:#314449;--muted:#6b7f83;--line:#dce5e5;--bg:#eef3f3;--surface:#fff;
+  --ok:#15a05a;--ok-soft:#dcf3e6;--warn:#d98414;--warn-soft:#fcf0db;--bad:#d83a40;--bad-soft:#fbe3e4;
+  --r:14px;--mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'Pretendard',-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{font-family:var(--sans);background:#cdd9d9;color:var(--ink);display:grid;place-items:start center;letter-spacing:-.01em}
+.phone{width:100%;max-width:440px;min-height:100vh;background:
+  radial-gradient(600px 300px at 90% -10%,rgba(20,184,196,.10),transparent 60%),
+  linear-gradient(180deg,#eef4f4,#e6eeef);
+  position:relative;display:flex;flex-direction:column;box-shadow:0 0 40px rgba(0,0,0,.12)}
+/* header */
+.hdr{position:sticky;top:0;z-index:10;background:linear-gradient(140deg,#0c2b2e,#0a2326);color:#eafffc;padding:18px 18px 16px}
+.hdr .top{display:flex;align-items:center;gap:10px}
+.hdr .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(140deg,var(--teal),var(--cyan));display:grid;place-items:center;flex:none}
+.hdr .logo svg{width:19px;height:19px}
+.hdr b{font-size:16px;font-weight:700}
+.hdr .sub{font-size:11px;color:#6fb3ab;letter-spacing:.04em}
+.hdr .back{background:rgba(255,255,255,.1);border:0;color:#eafffc;width:34px;height:34px;border-radius:10px;font-size:18px;cursor:pointer;display:grid;place-items:center}
+.who{margin-left:auto;text-align:right;font-size:11px;color:#9fd3cd}
+.who b{display:block;color:#fff;font-size:13px}
+/* branch chips in header */
+.brow{display:flex;gap:7px;margin-top:14px;overflow-x:auto;padding-bottom:2px}
+.bchip{flex:none;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:#cfe4e2;border-radius:999px;padding:7px 15px;font-size:13px;font-weight:600;cursor:pointer}
+.bchip.on{background:var(--teal);border-color:var(--teal);color:#fff}
+/* body */
+.body{flex:1;padding:18px 16px 120px}
+.hello{font-size:13px;color:var(--muted);margin:2px 0 16px}
+.hello b{color:var(--ink)}
+/* home tiles */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 16px;cursor:pointer;box-shadow:0 2px 8px rgba(14,31,37,.05);transition:transform .12s;text-align:left}
+.tile:active{transform:scale(.97)}
+.tile .ic{width:46px;height:46px;border-radius:13px;background:var(--teal-tint);color:var(--teal-700);display:grid;place-items:center;margin-bottom:13px}
+.tile .ic svg{width:24px;height:24px}
+.tile .tn{font-size:15.5px;font-weight:700}
+.tile .td{font-size:11.5px;color:var(--muted);margin-top:3px}
+.tile .cnt{margin-top:11px;font-family:var(--mono);font-size:12px;font-weight:600;color:var(--teal-700);background:var(--teal-tint);display:inline-block;padding:3px 9px;border-radius:999px}
+.tile.atp .ic{background:var(--warn-soft);color:var(--warn)} .tile.atp .cnt{background:var(--warn-soft);color:#9a5e0a}
+.tile.eq .ic{background:#e2eefb;color:#2f72c4} .tile.eq .cnt{background:#e2eefb;color:#2f72c4}
+.tile.loss .ic{background:var(--bad-soft);color:var(--bad)} .tile.loss .cnt{background:var(--bad-soft);color:var(--bad)}
+.summary{margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:15px 16px}
+.summary .sh{font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px;margin-bottom:10px}
+.summary .row{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.summary .row:last-child{border-bottom:0}
+.summary .row span{color:var(--muted)} .summary .row b{font-family:var(--mono)}
+.recent{margin-top:8px;font-size:11.5px;color:var(--muted)}
+/* form */
+.field{margin-bottom:18px}
+.label{font-size:13px;font-weight:700;color:var(--ink-2);margin-bottom:9px;display:flex;align-items:center;gap:6px}
+.label .req{color:var(--bad)}
+.hint{font-size:11px;color:var(--muted);font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:11px;padding:11px 15px;font-size:14px;font-weight:600;cursor:pointer;transition:all .1s}
+.chip:active{transform:scale(.96)}
+.chip.on{background:var(--teal);border-color:var(--teal);color:#fff;box-shadow:0 3px 10px rgba(12,154,141,.3)}
+.chip.on.warn{background:var(--warn);border-color:var(--warn)} .chip.on.bad{background:var(--bad);border-color:var(--bad)} .chip.on.ok{background:var(--ok);border-color:var(--ok)}
+input.fin,select.fin{width:100%;font-family:var(--sans);font-size:16px;padding:15px 16px;border:1.5px solid var(--line);border-radius:13px;background:var(--surface);color:var(--ink);outline:none}
+input.fin:focus,select.fin:focus{border-color:var(--teal)}
+input.big{font-family:var(--mono);font-size:34px;font-weight:700;text-align:center;padding:14px;letter-spacing:-.02em}
+.stepper{display:flex;align-items:center;gap:12px}
+.stepper button{width:54px;height:62px;border:1.5px solid var(--line);background:var(--surface);border-radius:13px;font-size:26px;font-weight:600;color:var(--teal-700);cursor:pointer}
+.stepper button:active{background:var(--teal-tint)}
+.stepper input{flex:1}
+.unit{font-size:13px;color:var(--muted);text-align:center;margin-top:6px}
+/* atp verdict */
+.verdict{margin-top:12px;border-radius:13px;padding:15px;text-align:center;font-weight:700;font-size:15px;border:1.5px solid var(--line);color:var(--muted);background:var(--surface)}
+.verdict.pass{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.verdict.fail{background:var(--bad-soft);border-color:var(--bad);color:var(--bad)}
+.verdict b{font-family:var(--mono);font-size:22px;display:block;margin-bottom:2px}
+/* submit */
+.submitbar{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:440px;padding:14px 16px 22px;background:linear-gradient(180deg,rgba(238,244,244,0),#e9f0f0 30%);}
+.btn{width:100%;border:0;border-radius:15px;padding:18px;font-family:var(--sans);font-size:16.5px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--teal),var(--teal-700));cursor:pointer;box-shadow:0 6px 18px rgba(12,154,141,.35)}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:var(--surface);color:var(--ink-2);border:1.5px solid var(--line);box-shadow:none}
+/* toast */
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#eafffc;padding:13px 20px;border-radius:13px;font-size:14px;font-weight:600;opacity:0;transition:all .3s;z-index:50;display:flex;align-items:center;gap:9px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast .tk{width:22px;height:22px;border-radius:50%;background:var(--ok);display:grid;place-items:center;flex:none}
+.view{display:none} .view.on{display:block}
+.note{background:var(--teal-tint);border:1px solid var(--teal-soft);color:var(--teal-700);border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.5;margin-top:6px}
+.proto{position:fixed;top:8px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:9.5px;color:#fff;background:rgba(14,31,37,.55);padding:3px 9px;border-radius:999px;z-index:60;pointer-events:none}
+/* feedback */
+.fbtn{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.24);color:#eafffc;border-radius:999px;padding:7px 12px;font-size:12.5px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;flex:none}
+.fbtn:active{transform:scale(.95)}
+.fb-mask{position:fixed;inset:0;background:rgba(8,20,22,.55);z-index:100;display:none;align-items:flex-end;justify-content:center}
+.fb-mask.on{display:flex}
+.fb-card{background:var(--surface);width:100%;max-width:440px;border-radius:22px 22px 0 0;padding:20px 18px calc(22px + env(safe-area-inset-bottom));max-height:92vh;overflow-y:auto;animation:fbup .24s ease}
+@keyframes fbup{from{transform:translateY(40px);opacity:.5}to{transform:translateY(0);opacity:1}}
+.fb-head{display:flex;align-items:center;gap:7px;font-size:16.5px;font-weight:700;color:var(--ink)}
+.fb-head .fx{margin-left:auto;background:var(--bg);border:0;width:32px;height:32px;border-radius:50%;font-size:15px;color:var(--muted);cursor:pointer;flex:none}
+.fb-sub{font-size:12px;color:var(--muted);margin:5px 0 4px;line-height:1.5}
+.fb-sub b{color:var(--teal-700)}
+.fb-l{font-size:13px;font-weight:700;color:var(--ink-2);margin:15px 0 7px;display:block}
+.fb-card textarea,.fb-card input{width:100%;font-family:var(--sans);font-size:15px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);outline:none;resize:vertical}
+.fb-card textarea:focus,.fb-card input:focus{border-color:var(--teal)}
+.fb-card textarea{min-height:60px}
+.fb-send{width:100%;border:0;border-radius:14px;padding:16px;margin-top:18px;font-family:var(--sans);font-size:16px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--teal),var(--teal-700));cursor:pointer}
+.fb-send:active{transform:scale(.98)} .fb-send:disabled{opacity:.5}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="proto">PROTOTYPE · 데모</div>
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="top">
+      <button class="back" id="backBtn" style="display:none" onclick="go('home')">‹</button>
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9a8.5 8.5 0 0 1 14.8-3.2"/><path d="M20.5 15a8.5 8.5 0 0 1-14.8 3.2"/><path d="M18 3v3.5h-3.5"/><path d="M6 21v-3.5h3.5"/></svg></div>
+      <div><b id="hTitle">RE:able 현장 입력</b><div class="sub" id="hSub">THEJOEUN · 세척 생산기록</div></div>
+      <div class="who">작업자<b id="whoName">김현장</b></div>
+      <button class="fbtn" onclick="fbOpen()">💬 의견</button>
+    </div>
+    <div class="brow" id="brow">
+      <div class="bchip on">화성</div><div class="bchip">광명</div><div class="bchip">인천</div><div class="bchip">천안</div>
+    </div>
+  </div>
+
+  <div class="body">
+    <!-- ===== HOME ===== -->
+    <div class="view on" id="v-home">
+      <div class="hello"><b id="dateLine">2026-06-11 (목)</b> · 화성 공장 · 오늘도 안전하게 👋</div>
+      <div class="tiles">
+        <div class="tile" onclick="go('prod')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9-5 9 5-9 5z"/><path d="M3 8v8l9 5 9-5V8"/></svg></div>
+          <div class="tn">처리량 기록</div><div class="td">세척한 식수·개수</div>
+          <div class="cnt" id="c-prod">오늘 0건</div>
+        </div>
+        <div class="tile atp" onclick="go('atp')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.8-7 9-4-1.2-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <div class="tn">ATP 위생</div><div class="td">측정값 입력 (≤20 합격)</div>
+          <div class="cnt" id="c-atp">오늘 0건</div>
+        </div>
+        <div class="tile eq" onclick="go('eq')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/></svg></div>
+          <div class="tn">설비 점검</div><div class="td">온도·이상유무</div>
+          <div class="cnt" id="c-eq">오늘 0건</div>
+        </div>
+        <div class="tile loss" onclick="go('loss')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/><path d="M10 11v5M14 11v5"/></svg></div>
+          <div class="tn">손실·재세척</div><div class="td">파손·분실·재세척</div>
+          <div class="cnt" id="c-loss">오늘 0건</div>
+        </div>
+      </div>
+
+      <div class="summary">
+        <div class="sh">📋 오늘 입력 현황 <span style="margin-left:auto;font-family:var(--mono);font-weight:700;color:var(--teal-700)" id="totCnt">0건</span></div>
+        <div class="row"><span>처리량 합계</span><b id="s-prod">0 식</b></div>
+        <div class="row"><span>ATP 합격 / 불합격</span><b id="s-atp">0 / 0</b></div>
+        <div class="row"><span>설비 점검</span><b id="s-eq">0 대</b></div>
+        <div class="row"><span>손실·재세척</span><b id="s-loss">0 건</b></div>
+        <div class="recent" id="recent">아직 입력이 없습니다. 위 버튼을 눌러 시작하세요.</div>
+      </div>
+      <div class="note">📱 이 화면이 작업자가 폰으로 보는 입력 도구입니다. 현장에 <b>QR코드</b>를 붙여두면 앱 설치 없이 바로 열립니다. 입력값은 자동으로 모여 MES 대시보드 숫자가 됩니다.</div>
+    </div>
+
+    <!-- ===== 처리량 ===== -->
+    <div class="view" id="v-prod">
+      <div class="field"><div class="label">품목 <span class="req">*</span></div>
+        <div class="chips" data-group="prod-item">
+          <div class="chip on">식판(4칸)</div><div class="chip">컵 10oz</div><div class="chip">컵 16oz</div><div class="chip">컵 22oz</div><div class="chip">리드</div><div class="chip">장례-밥그릇</div><div class="chip">장례-국그릇</div><div class="chip">장례-앞접시</div>
+        </div>
+      </div>
+      <div class="field"><div class="label">처리 수량 <span class="req">*</span></div>
+        <div class="stepper">
+          <button onclick="bump('prodQty',-10)">−</button>
+          <input class="fin big" id="prodQty" type="number" inputmode="numeric" value="0">
+          <button onclick="bump('prodQty',10)">+</button>
+        </div>
+        <div class="unit">식 / 개 (＋ 버튼은 10단위)</div>
+      </div>
+      <div class="field"><div class="label">작업 시간대</div>
+        <div class="chips" data-group="prod-shift"><div class="chip on">오전</div><div class="chip">오후</div><div class="chip">마감</div></div>
+      </div>
+      <div class="field"><div class="label">메모 <span class="hint">(선택)</span></div>
+        <input class="fin" id="prodMemo" placeholder="예: 컨베이어 2호 라인">
+      </div>
+    </div>
+
+    <!-- ===== ATP ===== -->
+    <div class="view" id="v-atp">
+      <div class="field"><div class="label">품목 <span class="req">*</span></div>
+        <div class="chips" data-group="atp-item"><div class="chip on">식판(4칸)</div><div class="chip">컵 16oz</div><div class="chip">장례 다회용기</div></div>
+      </div>
+      <div class="field"><div class="label">거래처 / Lot <span class="hint">(선택)</span></div>
+        <input class="fin" id="atpLot" placeholder="예: 햇살어린이집 · L-0611-018">
+      </div>
+      <div class="field"><div class="label">측정값 (RLU) <span class="req">*</span> <span class="hint" style="margin-left:auto">위생기준 ≤ 20</span></div>
+        <input class="fin big" id="atpRlu" type="number" inputmode="numeric" value="" placeholder="0" oninput="atpVerdict()">
+        <div class="verdict" id="atpV">숫자를 입력하면 합격 여부가 표시됩니다</div>
+      </div>
+      <div class="field"><div class="label">측정자 <span class="req">*</span></div>
+        <input class="fin" id="atpBy" value="김현장">
+      </div>
+    </div>
+
+    <!-- ===== 설비 점검 ===== -->
+    <div class="view" id="v-eq">
+      <div class="field"><div class="label">설비 <span class="req">*</span></div>
+        <div class="chips" data-group="eq-name"><div class="chip on">컨베이어 세척기</div><div class="chip">스팀 살균기</div><div class="chip">열풍 건조기</div><div class="chip">초음파 세척기</div></div>
+      </div>
+      <div class="field"><div class="label">세척 온도 <span class="hint" style="margin-left:auto">권장 60~65℃</span></div>
+        <div class="stepper"><button onclick="bump('eqWash',-1)">−</button><input class="fin big" id="eqWash" type="number" inputmode="numeric" value="63"><button onclick="bump('eqWash',1)">+</button></div><div class="unit">℃</div>
+      </div>
+      <div class="field"><div class="label">헹굼 온도 <span class="hint" style="margin-left:auto">권장 80~85℃</span></div>
+        <div class="stepper"><button onclick="bump('eqRinse',-1)">−</button><input class="fin big" id="eqRinse" type="number" inputmode="numeric" value="82"><button onclick="bump('eqRinse',1)">+</button></div><div class="unit">℃</div>
+      </div>
+      <div class="field"><div class="label">이상 유무 <span class="req">*</span></div>
+        <div class="chips" data-group="eq-status"><div class="chip on ok">정상</div><div class="chip warn">경고</div><div class="chip bad">이상</div></div>
+      </div>
+      <div class="field"><div class="label">비고 <span class="hint">(이상 시 필수)</span></div>
+        <input class="fin" id="eqMemo" placeholder="예: 헹굼 온도 낮음 · 필터 점검 필요">
+      </div>
+    </div>
+
+    <!-- ===== 손실·재세척 ===== -->
+    <div class="view" id="v-loss">
+      <div class="field"><div class="label">품목 <span class="req">*</span></div>
+        <div class="chips" data-group="loss-item"><div class="chip on">식판(4칸)</div><div class="chip">컵 16oz</div><div class="chip">리드</div><div class="chip">장례 다회용기</div></div>
+      </div>
+      <div class="field"><div class="label">구분 <span class="req">*</span></div>
+        <div class="chips" data-group="loss-type"><div class="chip on bad">파손</div><div class="chip warn">분실</div><div class="chip">재세척</div></div>
+      </div>
+      <div class="field"><div class="label">수량 <span class="req">*</span></div>
+        <div class="stepper"><button onclick="bump('lossQty',-1)">−</button><input class="fin big" id="lossQty" type="number" inputmode="numeric" value="1"><button onclick="bump('lossQty',1)">+</button></div><div class="unit">개</div>
+      </div>
+      <div class="field"><div class="label">사유</div>
+        <div class="chips" data-group="loss-reason"><div class="chip on">낙하·파손</div><div class="chip">노후</div><div class="chip">고객 미반납</div><div class="chip">오염 잔존</div><div class="chip">기타</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBMIT BAR -->
+  <div class="submitbar" id="subBar" style="display:none">
+    <button class="btn" id="subBtn" onclick="submitForm()">저장하기</button>
+  </div>
+
+  <div class="toast" id="toast"><span class="tk"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 6"/></svg></span><span id="toastMsg">저장되었습니다</span></div>
+
+  <!-- FEEDBACK MODAL -->
+  <div class="fb-mask" id="fbMask">
+    <div class="fb-card">
+      <div class="fb-head">💬 의견 보내기 <button class="fx" onclick="fbClose()">✕</button></div>
+      <div class="fb-sub">지금 보고 계신 <b id="fbScreen">이 화면</b>에 대해 자유롭게 적어주세요. 한 칸만 채워도 됩니다.</div>
+      <label class="fb-l">➕ 추가했으면 하는 항목·기능</label>
+      <textarea id="fbAdd" placeholder="예: 작업자 이름을 목록에서 고르는 칸이 있으면 좋겠다"></textarea>
+      <label class="fb-l">➖ 빼거나 불필요한 항목</label>
+      <textarea id="fbRemove" placeholder="예: 거래처/Lot 칸은 현장에서 잘 안 쓴다"></textarea>
+      <label class="fb-l">💡 그 외 의견 (불편한 점·아이디어)</label>
+      <textarea id="fbFree" placeholder="자유롭게 적어주세요"></textarea>
+      <label class="fb-l">작성자 <span style="font-weight:500;color:var(--muted)">(선택)</span></label>
+      <input id="fbWho" placeholder="이름 또는 직책 (예: 화성 검수 ○○○)">
+      <button class="fb-send" id="fbSendBtn" onclick="fbSend()">의견 보내기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const KEY='reable_field_log';
+let cur='home';
+let branch='화성';
+
+function log(){ try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return[]} }
+function save(arr){ localStorage.setItem(KEY,JSON.stringify(arr)) }
+function today(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0') } // 오늘 날짜(로컬 기준)
+
+const TITLES={ home:['RE:able 현장 입력','THEJOEUN · 세척 생산기록'],
+  prod:['처리량 기록','세척 완료 수량 입력'], atp:['ATP 위생 측정','위생기준 20 RLU 이하'],
+  eq:['설비 점검','가동 상태 기록'], loss:['손실·재세척','파손·분실·재세척'] };
+
+function go(v){
+  cur=v;
+  document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
+  document.getElementById('v-'+v).classList.add('on');
+  document.getElementById('hTitle').textContent=TITLES[v][0];
+  document.getElementById('hSub').textContent=TITLES[v][1];
+  document.getElementById('backBtn').style.display = v==='home'?'none':'grid';
+  document.getElementById('subBar').style.display = v==='home'?'none':'block';
+  document.getElementById('brow').style.display = v==='home'?'flex':'none';
+  if(v==='atp') atpVerdict();
+  window.scrollTo(0,0);
+  if(v==='home') refresh();
+}
+function bump(id,d){ const el=document.getElementById(id); el.value=Math.max(0,(parseInt(el.value||0)+d)); if(id==='atpRlu')atpVerdict(); }
+
+// chip groups single-select
+document.addEventListener('click',e=>{
+  const c=e.target.closest('.chip'); if(!c)return;
+  const g=c.parentElement.getAttribute('data-group'); if(!g)return;
+  c.parentElement.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+  c.classList.add('on');
+});
+// branch chips
+document.getElementById('brow').addEventListener('click',e=>{
+  const c=e.target.closest('.bchip'); if(!c)return;
+  document.querySelectorAll('.bchip').forEach(x=>x.classList.remove('on'));
+  c.classList.add('on'); branch=c.textContent;
+  document.querySelector('.hello').innerHTML='<b>'+document.getElementById('dateLine').textContent+'</b> · '+branch+' 공장 · 오늘도 안전하게 👋';
+});
+function pick(g){ const el=document.querySelector('[data-group="'+g+'"] .chip.on'); return el?el.textContent:''; }
+
+function atpVerdict(){
+  const v=parseInt(document.getElementById('atpRlu').value);
+  const el=document.getElementById('atpV');
+  if(isNaN(v)){ el.className='verdict'; el.textContent='숫자를 입력하면 합격 여부가 표시됩니다'; return; }
+  if(v<=20){ el.className='verdict pass'; el.innerHTML='<b>'+v+' RLU</b>합격 ✓ 출고 가능'; }
+  else { el.className='verdict fail'; el.innerHTML='<b>'+v+' RLU</b>불합격 ✕ 재세척 지시 (출고 차단)'; }
+}
+
+function toast(msg){ const t=document.getElementById('toast'); document.getElementById('toastMsg').textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); }
+
+function submitForm(){
+  const arr=log(); const t=today(); let rec={type:cur,branch,date:t,ts:new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})};
+  if(cur==='prod'){ const q=parseInt(document.getElementById('prodQty').value||0); if(q<=0)return toast('수량을 입력하세요');
+    rec.item=pick('prod-item'); rec.qty=q; rec.shift=pick('prod-shift'); rec.memo=document.getElementById('prodMemo').value;
+    document.getElementById('prodQty').value=0; document.getElementById('prodMemo').value=''; }
+  else if(cur==='atp'){ const r=parseInt(document.getElementById('atpRlu').value); if(isNaN(r))return toast('측정값을 입력하세요');
+    rec.item=pick('atp-item'); rec.rlu=r; rec.pass=r<=20; rec.lot=document.getElementById('atpLot').value; rec.by=document.getElementById('atpBy').value;
+    document.getElementById('atpRlu').value=''; document.getElementById('atpLot').value=''; atpVerdict(); }
+  else if(cur==='eq'){ rec.name=pick('eq-name'); rec.wash=document.getElementById('eqWash').value; rec.rinse=document.getElementById('eqRinse').value;
+    rec.status=pick('eq-status'); rec.memo=document.getElementById('eqMemo').value; document.getElementById('eqMemo').value=''; }
+  else if(cur==='loss'){ const q=parseInt(document.getElementById('lossQty').value||0); if(q<=0)return toast('수량을 입력하세요');
+    rec.item=pick('loss-item'); rec.ltype=pick('loss-type'); rec.qty=q; rec.reason=pick('loss-reason'); }
+  arr.unshift(rec); save(arr);
+  toast(rec.type==='atp'&&rec.pass===false?'불합격 기록 · 즉시 재세척 지시하세요':'저장되었습니다');
+  go('home');
+}
+
+function refresh(){
+  const d0=new Date(); const wd='일월화수목금토'[d0.getDay()];
+  document.getElementById('dateLine').textContent=today()+' ('+wd+')';
+  const arr=log().filter(r=>r.date===today());
+  const c={prod:0,atp:0,eq:0,loss:0}; arr.forEach(r=>c[r.type]++);
+  c4('c-prod',c.prod);c4('c-atp',c.atp);c4('c-eq',c.eq);c4('c-loss',c.loss);
+  document.getElementById('totCnt').textContent=arr.length+'건';
+  const prodSum=arr.filter(r=>r.type==='prod').reduce((a,b)=>a+(b.qty||0),0);
+  const pass=arr.filter(r=>r.type==='atp'&&r.pass).length, fail=arr.filter(r=>r.type==='atp'&&r.pass===false).length;
+  const lossSum=arr.filter(r=>r.type==='loss').reduce((a,b)=>a+(b.qty||0),0);
+  document.getElementById('s-prod').textContent=prodSum.toLocaleString()+' 식';
+  document.getElementById('s-atp').innerHTML=pass+' / <span style="color:var(--bad)">'+fail+'</span>';
+  document.getElementById('s-eq').textContent=arr.filter(r=>r.type==='eq').length+' 대';
+  document.getElementById('s-loss').textContent=lossSum+' 건';
+  const labels={prod:'처리량',atp:'ATP',eq:'설비',loss:'손실'};
+  const rec=arr.slice(0,3).map(r=>{
+    let d=labels[r.type]+' · '+(r.item||r.name||'')+(r.qty?(' '+r.qty):'')+(r.rlu!=null?(' '+r.rlu+'RLU'+(r.pass?' 합격':' 불합격')):'')+(r.status?(' '+r.status):'');
+    return '· '+r.ts+'  '+d; }).join('<br>');
+  document.getElementById('recent').innerHTML = arr.length? rec : '아직 입력이 없습니다. 위 버튼을 눌러 시작하세요.';
+}
+function c4(id,n){ document.getElementById(id).textContent='오늘 '+n+'건'; }
+
+// ===== 피드백(의견) =====
+function fbOpen(){
+  document.getElementById('fbScreen').textContent = (TITLES[cur]?TITLES[cur][0]:cur)+' 화면';
+  document.getElementById('fbMask').classList.add('on');
+}
+function fbClose(){ document.getElementById('fbMask').classList.remove('on'); }
+document.getElementById('fbMask').addEventListener('click',e=>{ if(e.target.id==='fbMask') fbClose(); });
+// 구글폼을 만들면 아래 FB_FORM_URL 에 폼 주소를 붙여넣으세요. 비워두면 메일로 의견이 전송됩니다.
+const FB_FORM_URL = "";
+const FB_MAIL = "narcissism700@gmail.com";
+function fbSend(){
+  const add=document.getElementById('fbAdd').value.trim();
+  const rm=document.getElementById('fbRemove').value.trim();
+  const free=document.getElementById('fbFree').value.trim();
+  if(!add&&!rm&&!free){ toast('한 칸이라도 적어주세요'); return; }
+  const screenName=(TITLES[cur]?TITLES[cur][0]:cur);
+  if(FB_FORM_URL){ window.open(FB_FORM_URL,'_blank'); toast('의견 폼이 열립니다 🙏'); fbClose(); return; }
+  const who=document.getElementById('fbWho').value.trim();
+  const subject='[MES 데모 의견] '+screenName+' 화면 ('+branch+')';
+  const body='■ 화면: '+screenName+'\n■ 지점: '+branch+'\n■ 작성자: '+(who||'(미기재)')
+    +'\n\n[➕ 추가했으면 하는 항목]\n'+(add||'-')
+    +'\n\n[➖ 빼거나 불필요한 항목]\n'+(rm||'-')
+    +'\n\n[💡 그 외 의견]\n'+(free||'-');
+  window.location.href='mailto:'+FB_MAIL+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  toast('메일 앱이 열립니다 — 보내기만 누르면 끝!');
+  document.getElementById('fbAdd').value=''; document.getElementById('fbRemove').value=''; document.getElementById('fbFree').value='';
+  fbClose();
+}
+refresh();
+</script>
+</body>
+</html>
